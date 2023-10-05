@@ -1,4 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const path = require('path');
 
 module.exports = {
@@ -7,23 +9,33 @@ module.exports = {
     output: {
         filename: 'main.js',
         path: path.resolve(__dirname, 'dist'),
+        clean: true,
     },
+    devtool: false,
     plugins: [
         new HtmlWebpackPlugin({
-            title: 'Weather Application',
-            template: './src/index.html'
-        })
+            template: './src/index.html',
+            js: './src/main.js',
+            css: './src/style.css'
+        }),
+        new MiniCssExtractPlugin(),
     ],
+    optimization: {
+        minimize: true,
+        minimizer: [
+            new CssMinimizerPlugin()
+        ],
+    },
     module: {
         rules: [
             {
                 test: /\.css$/i,
-                use: ['style-loader', 'css-loader']
+                use: [MiniCssExtractPlugin.loader, 'css-loader']
             },
             {
                 test: /\.(png|svg|jpg|jpeg|gif)$/i,
                 type: 'asset/resource'
             }
         ]
-    }
+    },
 }
