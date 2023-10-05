@@ -19,7 +19,8 @@ async function getWeatherOnLoad() {
     })
 }
 
-async function getWeather() {
+async function getWeather(event) {
+    event.preventDefault();
     const searchBar = document.getElementById('searchBar');
     const fullUrl = API_KEY + searchBar.value;
 
@@ -40,22 +41,22 @@ const populateData = function(json){
     const temp = document.getElementById('temp');
     const description = document.getElementById('description');
     const icon = document.getElementById('icon');
-    // const wind = document.getElementById('wind');
-    // const humidity = document.getElementById('humidity');
     const feelsLike = document.getElementById('feelsLike');
-    // const uv = document.getElementById('uv');
-    // const visibility = document.getElementById('visibility');
+    const wind = document.getElementById('wind');
+    const humidity = document.getElementById('humidity');
+    const uv = document.getElementById('uv');
+    const visibility = document.getElementById('visibility');
 
     location.textContent = json.location.name + ', ' + json.location.country;
     date.textContent = json.current.last_updated;
     temp.textContent = json.current.temp_c + '°C';
     description.textContent = json.current.condition.text;
     icon.src = json.current.condition.icon;
-    // wind.textContent = json.current.wind_kph + ' kph';
-    // humidity.textContent = json.current.humidity + '%';
     feelsLike.textContent = json.current.feelslike_c + '°C';
-    // uv.textContent = json.current.uv;
-    // visibility.textContent = json.current.vis_km + ' km';
+    wind.textContent = json.current.wind_kph + ' kph';
+    humidity.textContent = json.current.humidity + '%';
+    uv.textContent = json.current.uv;
+    visibility.textContent = json.current.vis_km + ' km';
 
     storeCurrentLocation();
     return
