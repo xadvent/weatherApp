@@ -1,33 +1,92 @@
 import { API_KEY } from '../slightlyHidden';
-
 import './style.css'
 
 const search = document.getElementById('search');
 
 async function getWeatherOnLoad() {
-    const response = await fetch(API_KEY + 'London');    
+    if(localStorage.getItem('cityName') === null){
+        localStorage.setItem('cityName', 'London');
+    }
+    const cityName = localStorage.getItem('cityName');
+    const response = await fetch(API_KEY + cityName);    
     response.json()
     .then((data) => {
         console.log(data);
+        populateData(data);
     })
     .catch((error) => {
-        console.log(error);
+        document.getElementById('error').textContent = error.message;
     })
 }
+
 async function getWeather() {
     const searchBar = document.getElementById('searchBar');
     const fullUrl = API_KEY + searchBar.value;
+
     const response = await fetch(fullUrl);    
     response.json()
     .then((data) => {
+        populateData(data);
         console.log(data);
     })
     .catch((error) => {
-        console.log(error);
+        document.getElementById('error').textContent = error;
     })
 }
-search.addEventListener('click', getWeather);
 
+const populateData = function(json){
+    const location = document.querySelector('#city-name');
+    const date = document.getElementById('date');
+    const temp = document.getElementById('temp');
+    const description = document.getElementById('description');
+    const icon = document.getElementById('icon');
+    // const wind = document.getElementById('wind');
+    // const humidity = document.getElementById('humidity');
+    const feelsLike = document.getElementById('feelsLike');
+    // const uv = document.getElementById('uv');
+    // const visibility = document.getElementById('visibility');
+
+    location.textContent = json.location.name + ', ' + json.location.country;
+    date.textContent = json.current.last_updated;
+    temp.textContent = json.current.temp_c + '°C';
+    description.textContent = json.current.condition.text;
+    icon.src = json.current.condition.icon;
+    // wind.textContent = json.current.wind_kph + ' kph';
+    // humidity.textContent = json.current.humidity + '%';
+    feelsLike.textContent = json.current.feelslike_c + '°C';
+    // uv.textContent = json.current.uv;
+    // visibility.textContent = json.current.vis_km + ' km';
+
+    storeCurrentLocation();
+    return
+}
+
+const countMinutes = function(){
+    const dateString = document.getElementById('date').textContent;
+    let date = new Date(dateString);
+    date.setMinutes(date.getMinutes() + 1);
+    document.getElementById('date').textContent = date;
+}
+const countSeconds = function(){
+    const dateString = document.getElementById('date').textContent;
+    let date = new Date(dateString);
+    date.setSeconds(date.getSeconds() + 1);
+    document.getElementById('date').textContent = date;
+}
+
+const updateMinutes = function(){
+    setInterval(countSeconds, 1000);
+    // setInterval(countMinutes, 60000);
+}
+updateMinutes()
+
+
+const storeCurrentLocation = function(){
+    const cityName = document.getElementById('city-name').textContent;
+    localStorage.setItem('cityName', cityName.split(',')[0]);
+}
+
+search.addEventListener('click', getWeather);
 
 window.onload = getWeatherOnLoad;
 

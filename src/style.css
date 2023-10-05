@@ -1,6 +1,6 @@
 /* Reset styles */
 :root {
-    --primary-color: #000;
+    --primary-color: #1373E6;
     --secondary-color: #fff;
     --accent-color: #f00;
 }
@@ -25,7 +25,49 @@ body {
     padding: 20px;
     text-align: center;
 }
+#container {
+    width: 100vw;
+    height: 100%;
+    display: grid;
+    grid-template-rows: 100px repeat(2, 1fr);
+    grid-template-columns: 1fr 1fr;
+    padding: 20px;
+}
 
 #header h1 {
     margin: 0;
+}
+
+.search {
+    padding: 20px;
+    text-align: right;
+}
+#searchBar {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 150px;
+}
+#search {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: var(--primary-color);
+    color: #fff;
+    cursor: pointer;
+}
+#error {
+    color: var(--accent-color);
+    display: inline-block;
+    position: relative;
+    left: -110px;
+}
+
+.weather {
+    height: 100%;
+    width: 100vw;
+}
+
+#description {
+    display: inline-block;
 }
