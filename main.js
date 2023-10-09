@@ -118,14 +118,20 @@ async function getWeather(event) {
     event.preventDefault();
     const searchBar = document.getElementById('searchBar');
     const fullUrl = _slightlyHidden__WEBPACK_IMPORTED_MODULE_0__.API_KEY + searchBar.value;
+    const timer = document.getElementById('time');
+
+    let timerStart = Date.now();
+    timer.textContent = 'Loading...';
 
     try {
         const response = await fetch(fullUrl);
         const data = await response.json();
-        if (data.status === 400) {
-            console.log(data);
-        }
+
+        let timerEnd = Date.now();
+        const timeElapsed = timerEnd - timerStart;
+
         populateData(data);
+        timer.textContent = timeElapsed + ' ms';
     } catch (error) {
         handleErrors(error['message'])
     } 
@@ -133,7 +139,9 @@ async function getWeather(event) {
 }
 
 function handleErrors(errorMessage){
+    document.getElementById('time').textContent = '';
     const errorDiv = document.getElementById('error')
+
     errorMessage === "Cannot read properties of undefined (reading 'name')" 
     ? errorDiv.textContent = 'Please enter a valid city name.'
     : errorMessage === 'Failed to fetch'
@@ -164,17 +172,12 @@ const populateData = function(json){
     uv.textContent = json.current.uv;
     visibility.textContent = json.current.vis_km + ' km';
     document.getElementById('error').textContent = '';
+    countSeconds()
 
     storeCurrentLocation();
     return
 }
 
-const countMinutes = function(){
-    const dateString = document.getElementById('date').textContent;
-    let date = new Date(dateString);
-    date.setMinutes(date.getMinutes() + 1);
-    document.getElementById('date').textContent = date;
-}
 const countSeconds = function(){
     const dateString = document.getElementById('date').textContent;
     let date = new Date(dateString);
@@ -184,7 +187,6 @@ const countSeconds = function(){
 
 const updateMinutes = function(){
     setInterval(countSeconds, 1000);
-    // setInterval(countMinutes, 60000);
 }
 updateMinutes()
 
