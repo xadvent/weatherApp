@@ -21,7 +21,6 @@ module.exports = {
         new MiniCssExtractPlugin(),
     ],
     optimization: {
-        minimize: true,
         minimizer: [
             new CssMinimizerPlugin()
         ],

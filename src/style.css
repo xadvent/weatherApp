@@ -57,6 +57,9 @@ body {
     color: #333;
     height: 100vh;
     width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 #header {
@@ -64,13 +67,15 @@ body {
     color: #fff;
     padding: 20px;
     text-align: center;
+    width: 100vw;
 }
 #container {
-    width: 100vw;
+    width: 80vw;
     display: grid;
     grid-template-rows: 100px repeat(2, 1fr);
     grid-template-columns: minmax(300px, 1fr) minmax(250px, 1fr);
     padding: 50px 20px 10px;
+    align-self: center;
 }
 
 #header h1 {

@@ -24,7 +24,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   API_KEY: () => (/* binding */ API_KEY)
 /* harmony export */ });
-const API_KEY = 'https://api.weatherapi.com/v1/current.json?key=54f33704159f4202af825233233009&q=';
+const API_KEY = 'https://api.weatherapi.com/v1/current.json?key=54f33704159f4202af825233233009&q='
 
 /***/ })
 
