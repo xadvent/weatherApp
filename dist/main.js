@@ -103,15 +103,15 @@ async function getWeatherOnLoad() {
         localStorage.setItem('cityName', 'London');
     }
     const cityName = localStorage.getItem('cityName');
-    const response = await fetch(_slightlyHidden__WEBPACK_IMPORTED_MODULE_0__.API_KEY + cityName);    
-    response.json()
-    .then((data) => {
-        console.log(data);
-        populateData(data);
-    })
-    .catch((error) => {
-        document.getElementById('error').textContent = error.message;
-    })
+    try {
+        const response = await fetch(_slightlyHidden__WEBPACK_IMPORTED_MODULE_0__.API_KEY + cityName);    
+        let data = await response.json()
+        populateData(data)
+        return
+    }
+    catch (error){
+        handleErrors(error['message'])
+    }
 }
 
 async function getWeather(event) {
@@ -119,15 +119,26 @@ async function getWeather(event) {
     const searchBar = document.getElementById('searchBar');
     const fullUrl = _slightlyHidden__WEBPACK_IMPORTED_MODULE_0__.API_KEY + searchBar.value;
 
-    const response = await fetch(fullUrl);    
-    response.json()
-    .then((data) => {
+    try {
+        const response = await fetch(fullUrl);
+        const data = await response.json();
+        if (data.status === 400) {
+            console.log(data);
+        }
         populateData(data);
-        console.log(data);
-    })
-    .catch((error) => {
-        document.getElementById('error').textContent = error;
-    })
+    } catch (error) {
+        handleErrors(error['message'])
+    } 
+    
+}
+
+function handleErrors(errorMessage){
+    const errorDiv = document.getElementById('error')
+    errorMessage === "Cannot read properties of undefined (reading 'name')" 
+    ? errorDiv.textContent = 'Please enter a valid city name.'
+    : errorMessage === 'Failed to fetch'
+    ? errorDiv.textContent = 'Please check your internet connection.'
+    : errorDiv.textContent = 'Something went wrong.'
 }
 
 const populateData = function(json){
@@ -152,6 +163,7 @@ const populateData = function(json){
     humidity.textContent = json.current.humidity + '%';
     uv.textContent = json.current.uv;
     visibility.textContent = json.current.vis_km + ' km';
+    document.getElementById('error').textContent = '';
 
     storeCurrentLocation();
     return

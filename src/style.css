@@ -102,9 +102,8 @@ body {
 }
 #error {
     color: var(--accent-color);
-    display: inline-block;
+    display: block;
     position: relative;
-    left: -110px;
 }
 
 .weather {
